@@ -6,4 +6,4 @@ branches:
 cache: yarn
 install: yarn
 script: yarn build
-after_success: "curl --ftp-create-dirs -T dist/**/*.* -u $SFTP_USER:$SFTP_PASSWORD $SFTP_URL"
+after_success: "find dist -type f -exec curl -v -u $SFTP_USER:$SFTP_PASSWORD --ftp-create-dirs -T {} $SFTP_URL{} \;"
