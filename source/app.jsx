@@ -5,11 +5,11 @@ const App = ({ children, css, js }) => (
   <html>
     <head>
       {css.map((file, index) => (
-        <link key={index} rel="stylesheet" href={file} />
+        <link key={index} rel="stylesheet" href={`/${file}`} />
       ))}
     </head>
     <body id="mount-point">{children}</body>
-    {js.map((file, index) => <script key={index} src={file} />)}
+    {js.map((file, index) => <script key={index} src={`/${file}`} />)}
   </html>
 );
 
