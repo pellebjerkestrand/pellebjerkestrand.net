@@ -8,8 +8,10 @@ const App = ({ children, css, js }) => (
         <link key={index} rel="stylesheet" href={`/${file}`} />
       ))}
     </head>
-    <body id="mount-point">{children}</body>
-    {js.map((file, index) => <script key={index} src={`/${file}`} />)}
+    <body>
+      <div id="mount-point">{children}</div>
+      {js.map((file, index) => <script key={index} src={`/${file}`} />)}
+    </body>
   </html>
 );
 

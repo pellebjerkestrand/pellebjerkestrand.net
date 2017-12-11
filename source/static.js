@@ -18,7 +18,9 @@ if (typeof document !== 'undefined') {
 export default ({ path, webpackStats }) => {
   const files = Object.keys(webpackStats.compilation.assets);
   const css = files.filter(value => value.match(/\.css$/));
-  const js = files.filter(value => value.match(/\.js$/));
+  const js = files.filter(
+    value => value.match(/\.js$/) && value.includes('static')
+  );
   const context = {};
 
   return `<!doctype html>${ReactDOMServer.renderToString(

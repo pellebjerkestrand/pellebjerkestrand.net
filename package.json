@@ -7,9 +7,9 @@
   },
   "license": "UNLICENSED",
   "scripts": {
-    "analyze": "webpack --env.hash --env.minify --env.analyzer",
-    "build": "webpack --env.hash --env.minify",
-    "dev": "webpack-dev-server",
+    "analyze": "node build/create-app-components && webpack --env.hash --env.minify --env.static --env.analyzer",
+    "build": "node build/create-app-components && webpack --env.hash --env.minify --env.static",
+    "dev": "node build/create-app-components && webpack-dev-server --env.static",
     "lint": "eslint --ext js,jsx ./source",
     "lint:fix": "eslint --ext js,jsx ./source --fix"
   },
@@ -36,7 +36,6 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.5",
     "import-glob": "^1.5.0",
-    "jsdom": "^11.3.0",
     "json-loader": "^0.5.4",
     "klaw": "^2.1.0",
     "node-sass": "^4.5.1",

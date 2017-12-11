@@ -1,6 +1,5 @@
 /* eslint-env node */
 /* eslint-disable no-console */
-const chalk = require('chalk');
 const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
@@ -11,32 +10,46 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
 module.exports = (env = {}) => {
+  const shouldBuildStaticSite = env.static === true;
   const shouldHashNames = env.hash === true;
   const shouldMinify = env.minify === true;
   const shouldUseAnalyzer = env.analyzer === true;
 
+  if (shouldBuildStaticSite) {
+    console.log('📙  Building static site');
+  }
+
   if (shouldHashNames) {
-    console.log(`${chalk.dim('[PB]')} 📝  Hashing filenames`);
+    console.log('📝  Hashing filenames');
   }
 
   if (shouldMinify) {
-    console.log(`${chalk.dim('[PB]')} 📦  Minifying code`);
+    console.log('📦  Minifying code');
   }
 
   if (shouldUseAnalyzer) {
-    console.log(`${chalk.dim('[PB]')} 🕵🏻  Starting bundle analyzer`);
+    console.log('🕵🏻  Starting bundle analyzer');
   }
 
   return {
     devServer: {
       disableHostCheck: true,
-      inline: true,
+      inline: false,
       stats: 'minimal'
     },
     devtool: shouldMinify ? 'source-map' : 'cheap-module-eval-source-map',
-    entry: {
-      client: ['./source/index.scss', './source/index.js']
-    },
+    entry: (() => {
+      const entries = {
+        client: ['./source/client.scss', './source/client.js'],
+        server: ['react-dom/server', './source/client.js']
+      };
+
+      if (shouldBuildStaticSite) {
+        entries.static = './source/static.js';
+      }
+
+      return entries;
+    })(),
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: shouldHashNames ? '[name].[chunkhash].js' : '[name].js',
@@ -103,33 +116,38 @@ module.exports = (env = {}) => {
     resolve: {
       extensions: ['.js', '.jsx', '.scss']
     },
-    plugins: (() => {
-      const plugins = [
-        new ExtractTextPlugin(
-          shouldHashNames ? '[name].[chunkhash].css' : '[name].css'
-        ),
-        new ManifestPlugin(),
-        new StaticSiteGeneratorPlugin({
-          paths: ['/', '/cv']
-        })
-      ].concat(shouldUseAnalyzer ? [new BundleAnalyzerPlugin()] : []);
-
-      if (shouldMinify) {
-        return plugins.concat([
-          new webpack.DefinePlugin({
-            'process.env': {
-              NODE_ENV: JSON.stringify('production')
-            }
-          }),
-          new webpack.optimize.UglifyJsPlugin({
-            compress: { warnings: false },
-            output: { comments: false },
-            sourceMap: true
-          })
-        ]);
-      }
-
-      return plugins;
-    })()
+    plugins: [
+      new ExtractTextPlugin(
+        shouldHashNames ? '[name].[chunkhash].css' : '[name].css'
+      ),
+      new ManifestPlugin()
+    ]
+      .concat(
+        shouldBuildStaticSite
+          ? [
+              new StaticSiteGeneratorPlugin({
+                entry: 'static',
+                paths: ['/', '/cv']
+              })
+            ]
+          : []
+      )
+      .concat(shouldUseAnalyzer ? [new BundleAnalyzerPlugin()] : [])
+      .concat(
+        shouldMinify
+          ? [
+              new webpack.DefinePlugin({
+                'process.env': {
+                  NODE_ENV: JSON.stringify('production')
+                }
+              }),
+              new webpack.optimize.UglifyJsPlugin({
+                compress: { warnings: false },
+                output: { comments: false },
+                sourceMap: true
+              })
+            ]
+          : []
+      )
   };
 };
