@@ -9,6 +9,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
+const getPathsFromRoutes = require('./build/get-paths-from-routes');
+
 module.exports = (env = {}) => {
   const shouldBuildStaticSite = env.static === true;
   const shouldHashNames = env.hash === true;
@@ -127,7 +129,7 @@ module.exports = (env = {}) => {
           ? [
               new StaticSiteGeneratorPlugin({
                 entry: 'static',
-                paths: ['/', '/cv']
+                paths: getPathsFromRoutes()
               })
             ]
           : []

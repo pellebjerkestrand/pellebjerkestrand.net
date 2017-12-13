@@ -15,33 +15,4 @@ body {
   margin: 0;
 }
 
-a {
-  color: #fff;
-}
-
-.slide {
-  display: flex;
-  height: 100vh;
-}
-
-.card {
-  margin: auto;
-  padding: 1rem;
-}
-
-.name,
-.title {
-  font-weight: 400;
-  margin: 0;
-}
-
-.link-items {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.link-item {
-  display: block;
-  margin-top: 0.25rem;
-}
+@import "./components/**/*.scss";
