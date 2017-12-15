@@ -5,24 +5,21 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
+const SuppressChunksPlugin = require('suppress-chunks-webpack-plugin').default;
 
 const getPathsFromRoutes = require('./build/get-paths-from-routes');
 
 module.exports = (env = {}) => {
   const shouldBuildStaticSite = env.static === true;
-  const shouldHashNames = env.hash === true;
   const shouldMinify = env.minify === true;
   const shouldUseAnalyzer = env.analyzer === true;
 
   if (shouldBuildStaticSite) {
     console.log('📙  Building static site');
-  }
-
-  if (shouldHashNames) {
-    console.log('📝  Hashing filenames');
   }
 
   if (shouldMinify) {
@@ -42,8 +39,9 @@ module.exports = (env = {}) => {
     devtool: shouldMinify ? 'source-map' : 'cheap-module-eval-source-map',
     entry: (() => {
       const entries = {
-        client: ['./source/client.scss', './source/client.js'],
-        server: ['react-dom/server', './source/client.js']
+        client: './source/client.js',
+        server: ['react-dom/server', './source/client.js'],
+        style: './source/client.scss'
       };
 
       if (shouldBuildStaticSite) {
@@ -54,7 +52,7 @@ module.exports = (env = {}) => {
     })(),
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: shouldHashNames ? '[name].[chunkhash].js' : '[name].js',
+      filename: '[name].[chunkhash].js',
       libraryTarget: 'umd'
     },
     module: {
@@ -94,7 +92,11 @@ module.exports = (env = {}) => {
           use: ExtractTextPlugin.extract([
             {
               loader: 'css-loader',
-              options: { importLoaders: 1, minimize: true, sourceMap: true }
+              options: {
+                importLoaders: 1,
+                minimize: shouldMinify,
+                sourceMap: true
+              }
             },
             {
               loader: 'postcss-loader',
@@ -119,10 +121,14 @@ module.exports = (env = {}) => {
       extensions: ['.js', '.jsx', '.scss']
     },
     plugins: [
-      new ExtractTextPlugin(
-        shouldHashNames ? '[name].[chunkhash].css' : '[name].css'
-      ),
-      new ManifestPlugin()
+      new ExtractTextPlugin('[name].[chunkhash].css'),
+      new ManifestPlugin(),
+      new SuppressChunksPlugin([
+        {
+          name: 'style',
+          match: /\.js(.map)?$/
+        }
+      ])
     ]
       .concat(
         shouldBuildStaticSite
@@ -130,7 +136,14 @@ module.exports = (env = {}) => {
               new StaticSiteGeneratorPlugin({
                 entry: 'static',
                 paths: getPathsFromRoutes()
-              })
+              }),
+              new CopyWebpackPlugin(
+                [
+                  { from: 'source/static/assets', to: 'assets' },
+                  { from: 'source/static/api', to: 'api' }
+                ],
+                { copyUnmodified: true }
+              )
             ]
           : []
       )
