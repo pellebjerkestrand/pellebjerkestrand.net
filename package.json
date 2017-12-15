@@ -7,13 +7,10 @@
   },
   "license": "UNLICENSED",
   "scripts": {
-    "analyze":
-      "node build/create-app-components && webpack --env.minify --env.static --env.analyzer",
-    "build":
-      "node build/create-app-components && webpack --env.minify --env.static",
+    "analyze": "node build/create-app-components && webpack --env.minify --env.static --env.analyzer",
+    "build": "node build/create-app-components && webpack --env.minify --env.static",
     "build:dynamic": "node build/create-app-components && webpack --env.minify",
-    "dev":
-      "node build/create-app-components && webpack-dev-server --env.static",
+    "dev": "node build/create-app-components && webpack-dev-server --env.static",
     "lint": "eslint --ext js,jsx ./source",
     "lint:fix": "eslint --ext js,jsx ./source --fix"
   },
