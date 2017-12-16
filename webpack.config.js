@@ -39,13 +39,14 @@ module.exports = (env = {}) => {
     devtool: shouldMinify ? 'source-map' : 'cheap-module-eval-source-map',
     entry: (() => {
       const entries = {
-        client: './source/client.js',
-        server: ['react-dom/server', './source/client.js'],
         style: './source/client.scss'
       };
 
       if (shouldBuildStaticSite) {
         entries.static = './source/static.js';
+      } else {
+        entries.client = './source/client.js';
+        entries.server = ['react-dom/server', './source/client.js'];
       }
 
       return entries;
@@ -155,25 +156,26 @@ module.exports = (env = {}) => {
               )
             ]
           : [
-              // NOTE: Uncomment to enable chunking and vendor bundle.
-              // new webpack.optimize.ModuleConcatenationPlugin(),
-              // new webpack.optimize.CommonsChunkPlugin({
-              //   name: 'vendor',
-              //   minChunks: module => {
-              //     if (
-              //       module.resource &&
-              //       /^.*\.(css|scss)$/.test(module.resource)
-              //     ) {
-              //       return false;
-              //     }
-              //     return (
-              //       module.context && module.context.includes('node_modules')
-              //     );
-              //   }
-              // }),
-              // new webpack.optimize.CommonsChunkPlugin({
-              //   name: 'manifest'
-              // })
+              new webpack.optimize.ModuleConcatenationPlugin(),
+              new webpack.optimize.CommonsChunkPlugin({
+                chunks: ['client'],
+                name: 'vendor',
+                minChunks: module => {
+                  if (
+                    module.resource &&
+                    /^.*\.(css|scss)$/.test(module.resource)
+                  ) {
+                    return false;
+                  }
+
+                  return (
+                    module.context && module.context.includes('node_modules')
+                  );
+                }
+              }),
+              new webpack.optimize.CommonsChunkPlugin({
+                name: 'manifest'
+              })
             ]
       )
       .concat(shouldUseAnalyzer ? [new BundleAnalyzerPlugin()] : [])

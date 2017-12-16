@@ -5,5 +5,5 @@ branches:
   - master
 cache: yarn
 install: yarn
-script: yarn build
+script: yarn build:static
 after_success: cd dist && find . -type f -exec curl -u $SFTP_USER:$SFTP_PASSWORD --ftp-create-dirs -T {} $SFTP_URL{} \;
