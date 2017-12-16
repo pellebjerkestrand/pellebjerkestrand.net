@@ -20,7 +20,7 @@ const disclaimers = [
 
 const fileName = 'app.components.js';
 
-console.log(`✏️  Writing ${chalk.blueBright(fileName)}`);
+console.log(`⚙️  Generating ${chalk.blueBright(fileName)}`);
 
 const components = {};
 
@@ -96,7 +96,7 @@ klaw(componentDirectory, { filter })
       {},
       err => {
         if (!err) {
-          console.log(`😊  ${chalk.blueBright(fileName)} written`);
+          console.log(`💾  ${chalk.blueBright(fileName)} saved`);
         } else {
           console.log(
             `👻  ${chalk.red('Error writing')} ${chalk.blueBright(fileName)}`,

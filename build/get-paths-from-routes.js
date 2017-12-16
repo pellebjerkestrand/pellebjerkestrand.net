@@ -2,16 +2,14 @@
 /* eslint-disable no-console */
 const chalk = require('chalk');
 const fs = require('fs');
-const path = require('path');
 
-const fileName = path.join(__dirname, '..', 'source', 'routes.jsx');
 const pathRegex = /path="(.*)"/g;
 
-function doGetPaths() {
+function doGetPaths(pathToRoutesFile) {
   const paths = [];
 
   try {
-    const data = fs.readFileSync(fileName, 'utf8');
+    const data = fs.readFileSync(pathToRoutesFile, 'utf8');
     let match = pathRegex.exec(data);
 
     while (match !== null) {
@@ -20,7 +18,7 @@ function doGetPaths() {
     }
   } catch (err) {
     console.log(
-      `👻  ${chalk.red('Error reading')} ${chalk.blueBright(fileName)}`,
+      `👻  ${chalk.red('Error reading')} ${chalk.blueBright(pathToRoutesFile)}`,
       err
     );
   }

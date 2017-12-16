@@ -19,7 +19,7 @@ module.exports = (env = {}) => {
   const shouldUseAnalyzer = env.analyzer === true;
 
   if (shouldBuildStaticSite) {
-    console.log('📙  Building static site');
+    console.log('🖥  Building static site');
   }
 
   if (shouldMinify) {
@@ -142,7 +142,9 @@ module.exports = (env = {}) => {
           ? [
               new StaticSiteGeneratorPlugin({
                 entry: 'static',
-                paths: getPathsFromRoutes()
+                paths: getPathsFromRoutes(
+                  path.join(__dirname, 'source', 'routes.jsx')
+                )
               }),
               new CopyWebpackPlugin(
                 [
