@@ -50,11 +50,18 @@ module.exports = (env = {}) => {
 
       return entries;
     })(),
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: '[name].[chunkhash].js',
-      libraryTarget: 'umd'
-    },
+    output: (() => {
+      const output = {
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].[chunkhash].js'
+      };
+
+      if (shouldBuildStaticSite) {
+        output.libraryTarget = 'umd';
+      }
+
+      return output;
+    })(),
     module: {
       rules: [
         {
@@ -145,7 +152,27 @@ module.exports = (env = {}) => {
                 { copyUnmodified: true }
               )
             ]
-          : []
+          : [
+              // NOTE: Uncomment to enable chunking and vendor bundle.
+              // new webpack.optimize.ModuleConcatenationPlugin(),
+              // new webpack.optimize.CommonsChunkPlugin({
+              //   name: 'vendor',
+              //   minChunks: module => {
+              //     if (
+              //       module.resource &&
+              //       /^.*\.(css|scss)$/.test(module.resource)
+              //     ) {
+              //       return false;
+              //     }
+              //     return (
+              //       module.context && module.context.includes('node_modules')
+              //     );
+              //   }
+              // }),
+              // new webpack.optimize.CommonsChunkPlugin({
+              //   name: 'manifest'
+              // })
+            ]
       )
       .concat(shouldUseAnalyzer ? [new BundleAnalyzerPlugin()] : [])
       .concat(
