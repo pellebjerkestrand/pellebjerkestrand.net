@@ -7,7 +7,7 @@ import App from './app';
 import Routes from './routes';
 
 if (typeof document !== 'undefined') {
-  ReactDOM.render(
+  ReactDOM.hydrate(
     <BrowserRouter>
       <Routes />
     </BrowserRouter>,

@@ -39,14 +39,24 @@ module.exports = (env = {}) => {
     devtool: shouldMinify ? 'source-map' : 'cheap-module-eval-source-map',
     entry: (() => {
       const entries = {
-        style: './source/client.scss'
+        style: './source/style.scss'
       };
 
       if (shouldBuildStaticSite) {
         entries.static = './source/static.js';
       } else {
-        entries.client = './source/client.js';
-        entries.server = ['react-dom/server', './source/client.js'];
+        entries.client = [
+          'babel-polyfill',
+          'expose-loader?React!react',
+          'expose-loader?ReactDOM!react-dom',
+          'expose-loader?Components!./source/app.components.js'
+        ];
+        entries.server = [
+          'expose-loader?React!react',
+          'expose-loader?ReactDOM!react-dom',
+          'expose-loader?ReactDOMServer!react-dom/server',
+          'expose-loader?Components!./source/app.components.js'
+        ];
       }
 
       return entries;
@@ -65,24 +75,6 @@ module.exports = (env = {}) => {
     })(),
     module: {
       rules: [
-        {
-          test: require.resolve('react'),
-          use: [
-            {
-              loader: 'expose-loader',
-              options: 'React'
-            }
-          ]
-        },
-        {
-          test: require.resolve('react-dom'),
-          use: [
-            {
-              loader: 'expose-loader',
-              options: 'ReactDOM'
-            }
-          ]
-        },
         {
           test: /\.jsx?$/,
           exclude: /node_modules/,
@@ -139,6 +131,7 @@ module.exports = (env = {}) => {
       ])
     ]
       .concat(
+        // NOTE: When https://github.com/markdalgleish/static-site-generator-webpack-plugin/pull/115 is accepted and published we can enable chunking at the same time as static site building.
         shouldBuildStaticSite
           ? [
               new StaticSiteGeneratorPlugin({
@@ -172,9 +165,6 @@ module.exports = (env = {}) => {
                     module.context && module.context.includes('node_modules')
                   );
                 }
-              }),
-              new webpack.optimize.CommonsChunkPlugin({
-                name: 'manifest'
               })
             ]
       )
