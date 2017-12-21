@@ -34,19 +34,21 @@ klaw(componentDirectory, { filter })
     let item;
     while ((item = this.read())) {
       const slugs = item.path.split(path.sep);
-      const index = `${slugs
+      const indexFile = `${slugs
         .filter((item, index) => {
           return index !== slugs.length - 1;
         })
         .join(path.sep)}${path.sep}index.js`;
-      if (
-        slugs[slugs.length - 1].replace('.jsx', '') ===
-          slugs[slugs.length - 2] &&
-        fs.existsSync(index)
-      ) {
-        components[
-          utils.kebabToPascal(slugs[slugs.length - 2])
-        ] = `./components${item.path
+      const fileName = slugs[slugs.length - 1].replace('.jsx', '');
+      const folderName = slugs[slugs.length - 2];
+
+      if (fileName === folderName && fs.existsSync(indexFile)) {
+        const componentName =
+          folderName[0] === folderName[0].toUpperCase()
+            ? folderName
+            : utils.kebabToPascal(slugs[slugs.length - 2]);
+
+        components[componentName] = `./components${item.path
           .replace(componentDirectory, '')
           .replace(`${path.sep}${slugs[slugs.length - 1]}`, '')}`;
       }
