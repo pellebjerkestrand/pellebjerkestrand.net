@@ -1,7 +1,6 @@
 /* eslint-env node */
 /* eslint-disable no-console */
 import path from 'path';
-import webpack from 'webpack';
 import autoprefixer from 'autoprefixer';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -9,8 +8,8 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import StaticSiteGeneratorPlugin from 'static-site-generator-webpack-plugin';
 import { default as SuppressChunksPlugin } from 'suppress-chunks-webpack-plugin';
 
-export default (env = {}) => {
-  const shouldMinify = env.minify === true;
+export default (env = {}, options = {}) => {
+  const shouldMinify = options.mode === 'production';
   const shouldUseAnalyzer = env.analyzer === true;
 
   if (shouldMinify) {
@@ -34,6 +33,7 @@ export default (env = {}) => {
     },
     output: {
       filename: '[name].[chunkhash].js',
+      globalObject: 'this',
       libraryTarget: 'umd',
       path: path.resolve(__dirname, 'dist')
     },
@@ -99,23 +99,6 @@ export default (env = {}) => {
       new CopyWebpackPlugin([{ from: 'source/static/assets', to: 'assets' }], {
         copyUnmodified: true
       })
-    ]
-      .concat(shouldUseAnalyzer ? [new BundleAnalyzerPlugin()] : [])
-      .concat(
-        shouldMinify
-          ? [
-              new webpack.DefinePlugin({
-                'process.env': {
-                  NODE_ENV: JSON.stringify('production')
-                }
-              }),
-              new webpack.optimize.UglifyJsPlugin({
-                compress: { warnings: false },
-                output: { comments: false },
-                sourceMap: true
-              })
-            ]
-          : []
-      )
+    ].concat(shouldUseAnalyzer ? [new BundleAnalyzerPlugin()] : [])
   };
 };
