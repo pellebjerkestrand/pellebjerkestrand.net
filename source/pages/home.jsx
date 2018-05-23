@@ -8,18 +8,20 @@ import Slide from '../components/slide';
 import Title from '../components/title';
 
 const Home = () => (
-  <div className="home">
-    <Slide>
-      <Card>
-        <Name>Pelle Bjerkestrand</Name>
-        <Title>Programmer</Title>
-        <LinkItems>
-          <Link url="https://twitter.com/notpelle">Twitter</Link>
-          <Link url="https://www.linkedin.com/in/bjerkestrand">LinkedIn</Link>
-        </LinkItems>
-      </Card>
-    </Slide>
-  </div>
+  <Slide>
+    <Card>
+      <Name>Pelle Bjerkestrand</Name>
+      <Title>Programmer</Title>
+      <LinkItems>
+        <Link icon="🐥" text="Twitter" url="https://twitter.com/notpelle" />
+        <Link
+          icon="👨‍💻"
+          text="LinkedIn"
+          url="https://www.linkedin.com/in/bjerkestrand"
+        />
+      </LinkItems>
+    </Card>
+  </Slide>
 );
 
 export default Home;

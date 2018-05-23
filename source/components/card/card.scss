@@ -1,4 +1,38 @@
 .card {
-  margin: auto;
-  padding: 1rem;
+  $break-at: 35rem;
+
+  background: #fff;
+  background: transparentize(#fff, 0.3);
+  border-radius: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+
+  @media screen and (min-width: $break-at) {
+    align-items: center;
+    flex-direction: row;
+  }
+
+  &__image-area {
+    flex: 0 0 8rem;
+    margin: 0 auto 2rem auto;
+    width: 8rem;
+
+    @media screen and (min-width: $break-at) {
+      margin: 0 1rem 0 0;
+    }
+  }
+
+  &__dude {
+    border-radius: 50%;
+    height: 0;
+    overflow: hidden;
+    padding-bottom: 100%;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+  }
 }
