@@ -5,6 +5,7 @@ const App = ({ children, css, js }) => (
   <html>
     <head>
       <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Pelle Bjerkestrand - Programmer</title>
       {css.map(file => <link key={file} rel="stylesheet" href={`/${file}`} />)}
     </head>
