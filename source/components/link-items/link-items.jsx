@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const LinkItems = ({ children }) => (
   <ul className="link-items">
     {React.Children.map(children, (child, index) => (
-      <li className="link-item" key={child.id || index}>
+      <li className="link-items__item" key={child.id || index}>
         {child}
       </li>
     ))}

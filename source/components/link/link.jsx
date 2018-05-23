@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Link = ({ children, url }) => (
+const Link = ({ icon, text, url }) => (
   <a className="link" href={url}>
-    {children}
+    {icon && <span className="link__icon">{icon}</span>}
+    <span className="link__text">{text}</span>
   </a>
 );
 
 Link.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.arrayOf(PropTypes.node)
-  ]),
-  url: PropTypes.string
+  icon: PropTypes.string,
+  text: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired
 };
 
 export default Link;

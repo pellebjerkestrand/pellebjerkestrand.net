@@ -1,4 +1,32 @@
+@keyframes pulse {
+  0% {
+    background-color: #fea3aa;
+  }
+  20% {
+    background-color: #f8b88b;
+  }
+  40% {
+    background-color: #faf884;
+  }
+  60% {
+    background-color: #baed91;
+  }
+  80% {
+    background-color: #b2cefe;
+  }
+  100% {
+    background-color: #f2a2e8;
+  }
+}
+
 .slide {
+  align-content: center;
+  align-items: center;
+  animation: pulse 20s infinite alternate;
+  background: #fea3aa;
+  color: #010101;
   display: flex;
+  font-family: Verdana, sans-serif;
   height: 100vh;
+  justify-content: center;
 }
