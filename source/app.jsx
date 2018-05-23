@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const App = ({ children, css, js }) => (
   <html>
     <head>
-      <meta charset="utf-8" />
+      <meta charSet="utf-8" />
       <title>Pelle Bjerkestrand - Programmer</title>
       {css.map(file => <link key={file} rel="stylesheet" href={`/${file}`} />)}
     </head>
