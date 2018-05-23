@@ -6,21 +6,12 @@ import autoprefixer from 'autoprefixer';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import ManifestPlugin from 'webpack-manifest-plugin';
-import reactRouterToArray from 'react-router-to-array';
 import StaticSiteGeneratorPlugin from 'static-site-generator-webpack-plugin';
 import { default as SuppressChunksPlugin } from 'suppress-chunks-webpack-plugin';
 
-import routes from './source/routes';
-
 export default (env = {}) => {
-  const shouldBuildStaticSite = env.static === true;
   const shouldMinify = env.minify === true;
   const shouldUseAnalyzer = env.analyzer === true;
-
-  if (shouldBuildStaticSite) {
-    console.log('🖥  Building static site');
-  }
 
   if (shouldMinify) {
     console.log('📦  Minifying code');
@@ -37,42 +28,15 @@ export default (env = {}) => {
       stats: 'minimal'
     },
     devtool: shouldMinify ? 'source-map' : 'cheap-module-eval-source-map',
-    entry: (() => {
-      const entries = {
-        style: './source/style.scss'
-      };
-
-      if (shouldBuildStaticSite) {
-        entries.static = './source/static.js';
-      } else {
-        entries.client = [
-          'babel-polyfill',
-          'expose-loader?React!react',
-          'expose-loader?ReactDOM!react-dom',
-          'expose-loader?Components!./source/app.components.js'
-        ];
-        entries.server = [
-          'expose-loader?React!react',
-          'expose-loader?ReactDOM!react-dom',
-          'expose-loader?ReactDOMServer!react-dom/server',
-          'expose-loader?Components!./source/app.components.js'
-        ];
-      }
-
-      return entries;
-    })(),
-    output: (() => {
-      const output = {
-        path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[chunkhash].js'
-      };
-
-      if (shouldBuildStaticSite) {
-        output.libraryTarget = 'umd';
-      }
-
-      return output;
-    })(),
+    entry: {
+      static: ['babel-polyfill', './source/static.js'],
+      style: './source/style.scss'
+    },
+    output: {
+      filename: '[name].[chunkhash].js',
+      libraryTarget: 'umd',
+      path: path.resolve(__dirname, 'dist')
+    },
     module: {
       rules: [
         {
@@ -122,50 +86,20 @@ export default (env = {}) => {
     },
     plugins: [
       new ExtractTextPlugin('[name].[chunkhash].css'),
-      new ManifestPlugin(),
       new SuppressChunksPlugin([
         {
           name: 'style',
           match: /\.js(.map)?$/
         }
-      ])
+      ]),
+      new StaticSiteGeneratorPlugin({
+        entry: 'static',
+        paths: '/'
+      }),
+      new CopyWebpackPlugin([{ from: 'source/static/assets', to: 'assets' }], {
+        copyUnmodified: true
+      })
     ]
-      .concat(
-        // NOTE: When https://github.com/markdalgleish/static-site-generator-webpack-plugin/pull/115 is accepted and published we can enable chunking at the same time as static site building.
-        shouldBuildStaticSite
-          ? [
-              new StaticSiteGeneratorPlugin({
-                entry: 'static',
-                paths: reactRouterToArray(routes())
-              }),
-              new CopyWebpackPlugin(
-                [
-                  { from: 'source/static/assets', to: 'assets' },
-                  { from: 'source/static/api', to: 'api' }
-                ],
-                { copyUnmodified: true }
-              )
-            ]
-          : [
-              new webpack.optimize.ModuleConcatenationPlugin(),
-              new webpack.optimize.CommonsChunkPlugin({
-                chunks: ['client'],
-                name: 'vendor',
-                minChunks: module => {
-                  if (
-                    module.resource &&
-                    /^.*\.(css|scss)$/.test(module.resource)
-                  ) {
-                    return false;
-                  }
-
-                  return (
-                    module.context && module.context.includes('node_modules')
-                  );
-                }
-              })
-            ]
-      )
       .concat(shouldUseAnalyzer ? [new BundleAnalyzerPlugin()] : [])
       .concat(
         shouldMinify

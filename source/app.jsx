@@ -4,13 +4,11 @@ import PropTypes from 'prop-types';
 const App = ({ children, css, js }) => (
   <html>
     <head>
-      {css.map((file, index) => (
-        <link key={index} rel="stylesheet" href={`/${file}`} />
-      ))}
+      {css.map(file => <link key={file} rel="stylesheet" href={`/${file}`} />)}
     </head>
     <body>
       <div id="mount-point">{children}</div>
-      {js.map((file, index) => <script key={index} src={`/${file}`} />)}
+      {js.map(file => <script key={file} src={`/${file}`} />)}
     </body>
   </html>
 );
