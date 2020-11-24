@@ -13,17 +13,7 @@ const Home = () => (
       <Name>Pelle Bjerkestrand</Name>
       <Title>Programmer</Title>
       <LinkItems>
-        <Link
-          icon="📷"
-          text="Instagram"
-          url="https://www.instagram.com/pelle.bjerkestrand/"
-        />
         <Link icon="🐥" text="Twitter" url="https://twitter.com/notpelle" />
-        <Link
-          icon="👨‍💻"
-          text="LinkedIn"
-          url="https://www.linkedin.com/in/bjerkestrand"
-        />
       </LinkItems>
     </Card>
   </Slide>
