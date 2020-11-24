@@ -3,19 +3,20 @@ import PropTypes from 'prop-types';
 import { Motion, spring } from 'react-motion';
 
 import clamp from '../../utils/clamp';
+import headshot from '../../static/assets/metal.jpg';
 
 class Card extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([
       PropTypes.node,
-      PropTypes.arrayOf(PropTypes.node)
-    ])
+      PropTypes.arrayOf(PropTypes.node),
+    ]),
   };
 
   state = {
     alpha: 0,
     beta: 0,
-    gamma: 0
+    gamma: 0,
   };
 
   isFunEnabled = false;
@@ -36,7 +37,7 @@ class Card extends React.Component {
       {
         alpha,
         beta: clamp(beta, 0, 90),
-        gamma: clamp(gamma, -90, 90)
+        gamma: clamp(gamma, -90, 90),
       },
       () => {
         this.isMoving = false;
@@ -72,7 +73,7 @@ class Card extends React.Component {
             style={{
               alpha: spring(this.state.alpha),
               beta: spring(this.state.beta),
-              gamma: spring(this.state.gamma)
+              gamma: spring(this.state.gamma),
             }}
           >
             {interpolatingStyles => (
@@ -81,8 +82,9 @@ class Card extends React.Component {
                 style={
                   this.isFunEnabled
                     ? {
-                        transform: `rotateX(${interpolatingStyles.beta -
-                          90}deg)`
+                        transform: `rotateX(${
+                          interpolatingStyles.beta - 90
+                        }deg)`,
                       }
                     : {}
                 }
@@ -91,7 +93,7 @@ class Card extends React.Component {
                   <pre>{JSON.stringify(interpolatingStyles, null, 2)}</pre>
                 </code>
                 <img
-                  src="/assets/metal.jpg"
+                  src={headshot}
                   alt="Pelle Bjerkestrand, headshot"
                   className="card__image"
                   title="☠️"

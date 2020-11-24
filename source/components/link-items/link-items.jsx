@@ -14,8 +14,8 @@ const LinkItems = ({ children }) => (
 LinkItems.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.node,
-    PropTypes.arrayOf(PropTypes.node)
-  ])
+    PropTypes.arrayOf(PropTypes.node),
+  ]),
 };
 
 export default LinkItems;
