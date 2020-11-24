@@ -2,9 +2,9 @@ language: node_js
 node_js: "lts/*"
 branches:
   only:
-  - master
-cache: yarn
-install: yarn
-script: yarn build
+    - master
+cache: npm
+install: npm ci
+script: npm run build
 after_success:
   - test $TRAVIS_BRANCH = "master" && cd dist && find . -type f -exec curl -u $SFTP_USER:$SFTP_PASSWORD --ftp-create-dirs -T {} $SFTP_URL{} \;
