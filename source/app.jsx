@@ -7,11 +7,15 @@ const App = ({ children, css, js }) => (
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Pelle Bjerkestrand - Programmer</title>
-      {css.map(file => <link key={file} rel="stylesheet" href={`/${file}`} />)}
+      {css.map(file => (
+        <link key={file} rel="stylesheet" href={`/${file}`} />
+      ))}
     </head>
     <body>
       <div id="mount-point">{children}</div>
-      {js.map(file => <script key={file} src={`/${file}`} />)}
+      {js.map(file => (
+        <script key={file} src={`/${file}`} />
+      ))}
     </body>
   </html>
 );
@@ -19,15 +23,15 @@ const App = ({ children, css, js }) => (
 App.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.node,
-    PropTypes.arrayOf(PropTypes.node)
+    PropTypes.arrayOf(PropTypes.node),
   ]),
   css: PropTypes.array,
-  js: PropTypes.array
+  js: PropTypes.array,
 };
 
 App.defaultProps = {
   css: [],
-  js: []
+  js: [],
 };
 
 export default App;
