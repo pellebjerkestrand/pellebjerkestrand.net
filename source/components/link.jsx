@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
 const Link = ({ icon, text, url }) => (
   <a className="link" href={url}>
@@ -7,11 +6,5 @@ const Link = ({ icon, text, url }) => (
     <span className="link__text">{text}</span>
   </a>
 );
-
-Link.propTypes = {
-  icon: PropTypes.string,
-  text: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-};
 
 export default Link;
