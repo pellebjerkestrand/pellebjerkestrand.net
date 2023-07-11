@@ -22,6 +22,7 @@ jobs:
           local-path: dist/
           remote-host: ${{ secrets.SFTP_HOST }}
           remote-password: ${{ secrets.SFTP_PASSWORD }}
+          remote-path: .
           remote-port: ${{ secrets.SFTP_PORT }}
           remote-protocol: sftp
           remote-user: ${{ secrets.SFTP_USER }}
