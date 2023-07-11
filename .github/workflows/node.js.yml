@@ -17,12 +17,12 @@ jobs:
           node-version: 16.x
       - run: npm ci
       - run: npm run build
-      - uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - uses: milanmk/actions-file-deployer@master
         with:
-          dry-run: true
-          local-dir: dist/
-          password: ${{ secrets.SFTP_PASSWORD }}
-          port: ${{ secrets.SFTP_PORT }}
-          protocol: ftps
-          server: ${{ secrets.SFTP_HOST }}
-          username: ${{ secrets.SFTP_USER }}
+          local-path: dist/
+          remote-host: ${{ secrets.SFTP_HOST }}
+          remote-password: ${{ secrets.SFTP_PASSWORD }}
+          remote-port: ${{ secrets.SFTP_PORT }}
+          remote-protocol: sftp
+          remote-user: ${{ secrets.SFTP_USER }}
+          sync: full
