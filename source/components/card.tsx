@@ -2,7 +2,7 @@ import React from "react";
 
 import image from "../assets/metal.jpg";
 
-const Card = ({ children }) => (
+const Card: React.FC<React.PropsWithChildren> = ({ children }) => (
   <div className="card">
     <div className="card__image-area">
       <div className="card__dude">

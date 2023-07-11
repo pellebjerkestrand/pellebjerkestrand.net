@@ -1,6 +1,11 @@
 import React from "react";
 
-const Html = ({ children, css, title }) => (
+const Html: React.FC<
+  React.PropsWithChildren<{
+    css: string;
+    title: string;
+  }>
+> = ({ children, css, title }) => (
   <html>
     <head>
       <meta charSet="utf-8" />
