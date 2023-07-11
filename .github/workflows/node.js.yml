@@ -23,6 +23,6 @@ jobs:
           local-dir: dist
           password: ${{ secrets.SFTP_PASSWORD }}
           port: ${{ secrets.SFTP_PORT }}
-          protocol: sftp
+          protocol: ftps
           server: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USER }}
