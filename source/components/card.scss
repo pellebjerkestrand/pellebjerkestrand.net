@@ -4,31 +4,23 @@
   background: #fff;
   background: transparentize(#fff, 0.3);
   border-radius: 0.2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  gap: 1rem;
+  grid-template-rows: 8rem 1fr;
   padding: 2rem;
 
   @media screen and (min-width: $break-at) {
     align-items: center;
-    flex-direction: row;
-  }
-
-  &__image-area {
-    flex: 0 0 8rem;
-    margin: 0 auto 2rem auto;
-    width: 8rem;
-
-    @media screen and (min-width: $break-at) {
-      margin: 0 2rem 0 0;
-    }
+    grid-template-columns: 8rem 1fr;
+    grid-template-rows: 1fr;
   }
 
   &__dude {
     border-radius: 50%;
-    height: 0;
+    justify-self: center;
+    height: 8rem;
     overflow: hidden;
-    padding-bottom: 100%;
+    width: 8rem;
   }
 
   &__image {
